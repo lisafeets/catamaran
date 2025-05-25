@@ -1,0 +1,322 @@
+// Catamaran Database Schema
+// Privacy-first design with encryption and audit logging
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Core user management
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  phone     String?  @unique
+  firstName String
+  lastName  String
+  password  String   // bcrypt hashed
+  role      UserRole @default(SENIOR)
+  
+  // Privacy and consent
+  consentGivenAt    DateTime?
+  privacyPolicyVersion String?
+  isActive          Boolean  @default(true)
+  
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  lastSeenAt DateTime?
+  
+  // Security
+  emailVerified   Boolean @default(false)
+  emailVerifiedAt DateTime?
+  twoFactorEnabled Boolean @default(false)
+  
+  // Relationships
+  seniorProfile   SeniorProfile?
+  familyProfile   FamilyProfile?
+  
+  // Senior relationships (when user is a senior)
+  familyConnections FamilyConnection[] @relation("SeniorConnections")
+  
+  // Family member relationships (when user is family)
+  guardianConnections FamilyConnection[] @relation("GuardianConnections")
+  
+  // Activity logs
+  callLogs    CallLog[]
+  smsLogs     SmsLog[]
+  alertsSent  Alert[] @relation("AlertSender")
+  alertsReceived Alert[] @relation("AlertReceiver")
+  
+  // Audit trail
+  auditLogs   AuditLog[]
+  
+  @@map("users")
+}
+
+model SeniorProfile {
+  id     String @id @default(cuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // Device information (encrypted)
+  deviceId          String?  @unique
+  deviceModel       String?
+  androidVersion    String?
+  appVersion        String?
+  
+  // Monitoring preferences
+  callMonitoring    Boolean  @default(true)
+  smsMonitoring     Boolean  @default(true)
+  emergencyContacts Json?    // Encrypted JSON array
+  
+  // Health check
+  lastHeartbeat     DateTime?
+  isOnline          Boolean  @default(false)
+  
+  @@map("senior_profiles")
+}
+
+model FamilyProfile {
+  id     String @id @default(cuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // Notification preferences
+  emailNotifications Boolean @default(true)
+  smsNotifications   Boolean @default(false)
+  pushNotifications  Boolean @default(true)
+  
+  // Alert thresholds
+  callFrequencyThreshold    Int @default(10)  // calls per hour
+  smsFrequencyThreshold     Int @default(20)  // sms per hour
+  unknownNumberThreshold    Int @default(5)   // unknown calls per day
+  
+  @@map("family_profiles")
+}
+
+// Family connections with granular permissions
+model FamilyConnection {
+  id             String                 @id @default(cuid())
+  seniorId       String
+  guardianId     String
+  status         ConnectionStatus       @default(PENDING)
+  permissions    FamilyPermission[]
+  
+  // Relationship details
+  relationshipType String?  // "child", "spouse", "caregiver", etc.
+  nickname         String?  // How the senior prefers to address family member
+  
+  // Security
+  inviteToken      String?  @unique
+  inviteExpiresAt  DateTime?
+  connectedAt      DateTime?
+  
+  // Timestamps
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  
+  // Relations
+  senior    User @relation("SeniorConnections", fields: [seniorId], references: [id], onDelete: Cascade)
+  guardian  User @relation("GuardianConnections", fields: [guardianId], references: [id], onDelete: Cascade)
+  
+  @@unique([seniorId, guardianId])
+  @@map("family_connections")
+}
+
+model FamilyPermission {
+  id           String           @id @default(cuid())
+  connectionId String
+  permission   PermissionType
+  grantedAt    DateTime         @default(now())
+  grantedBy    String           // User ID who granted the permission
+  
+  connection FamilyConnection @relation(fields: [connectionId], references: [id], onDelete: Cascade)
+  
+  @@unique([connectionId, permission])
+  @@map("family_permissions")
+}
+
+// Call logs - metadata only, no content
+model CallLog {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // Call metadata (encrypted)
+  phoneNumberHash String   // Hashed phone number for privacy
+  contactName     String?  // Encrypted contact name if available
+  duration        Int      // Duration in seconds
+  callType        CallType
+  timestamp       DateTime
+  
+  // Risk analysis
+  isKnownContact     Boolean @default(false)
+  suspiciousPatterns Json?   // Encrypted analysis results
+  riskScore          Float?  @default(0.0)
+  
+  // Geographic data (if available and consented)
+  locationData Json? // Encrypted location if permission granted
+  
+  // Processing metadata
+  processedAt DateTime @default(now())
+  analysisVersion String? // Version of analysis algorithm used
+  
+  @@index([userId, timestamp])
+  @@index([phoneNumberHash])
+  @@map("call_logs")
+}
+
+// SMS logs - NO CONTENT, metadata only
+model SmsLog {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // SMS metadata (encrypted)
+  phoneNumberHash String   // Hashed phone number for privacy
+  contactName     String?  // Encrypted contact name if available
+  messageCount    Int      @default(1) // Number of messages in conversation
+  smsType         SmsType
+  timestamp       DateTime
+  
+  // Risk analysis (NO content analysis)
+  isKnownContact     Boolean @default(false)
+  frequencyPattern   Json?   // Encrypted frequency analysis
+  riskScore          Float?  @default(0.0)
+  
+  // Processing metadata
+  processedAt DateTime @default(now())
+  analysisVersion String?
+  
+  @@index([userId, timestamp])
+  @@index([phoneNumberHash])
+  @@map("sms_logs")
+}
+
+// Alert system for family notifications
+model Alert {
+  id          String      @id @default(cuid())
+  senderId    String      // Senior who triggered the alert
+  receiverId  String      // Family member receiving the alert
+  type        AlertType
+  severity    AlertSeverity @default(MEDIUM)
+  
+  // Alert content
+  title       String
+  message     String
+  metadata    Json?       // Additional alert data (encrypted)
+  
+  // Status tracking
+  status      AlertStatus @default(PENDING)
+  sentAt      DateTime    @default(now())
+  readAt      DateTime?
+  acknowledgedAt DateTime?
+  
+  // Relations
+  sender    User @relation("AlertSender", fields: [senderId], references: [id])
+  receiver  User @relation("AlertReceiver", fields: [receiverId], references: [id])
+  
+  @@index([receiverId, status])
+  @@index([senderId, sentAt])
+  @@map("alerts")
+}
+
+// Comprehensive audit logging for compliance
+model AuditLog {
+  id        String     @id @default(cuid())
+  userId    String?
+  user      User?      @relation(fields: [userId], references: [id])
+  
+  // Action details
+  action    String     // Description of action taken
+  entity    String     // What was affected
+  entityId  String?    // ID of affected entity
+  
+  // Request details
+  ipAddress String?
+  userAgent String?
+  endpoint  String?
+  method    String?    // HTTP method
+  
+  // Data changes (encrypted)
+  oldValues Json?      // Previous values (encrypted)
+  newValues Json?      // New values (encrypted)
+  
+  // Metadata
+  success   Boolean    @default(true)
+  errorMessage String?
+  sessionId String?
+  
+  // Timestamp
+  timestamp DateTime   @default(now())
+  
+  @@index([userId, timestamp])
+  @@index([action, timestamp])
+  @@map("audit_logs")
+}
+
+// Enums for type safety
+enum UserRole {
+  SENIOR
+  FAMILY_MEMBER
+  ADMIN
+}
+
+enum ConnectionStatus {
+  PENDING
+  ACTIVE
+  SUSPENDED
+  TERMINATED
+}
+
+enum PermissionType {
+  VIEW_CALL_LOGS
+  VIEW_SMS_LOGS
+  RECEIVE_EMERGENCY_ALERTS
+  RECEIVE_SCAM_ALERTS
+  RECEIVE_ACTIVITY_ALERTS
+  MANAGE_SETTINGS
+  VIEW_LOCATION
+}
+
+enum CallType {
+  INCOMING
+  OUTGOING
+  MISSED
+}
+
+enum SmsType {
+  INCOMING
+  OUTGOING
+}
+
+enum AlertType {
+  SCAM_DETECTION
+  EMERGENCY_CONTACT
+  UNUSUAL_ACTIVITY
+  DEVICE_OFFLINE
+  FREQUENT_UNKNOWN_CALLS
+  SUSPICIOUS_SMS_PATTERN
+  LOCATION_ALERT
+  FAMILY_MESSAGE
+}
+
+enum AlertSeverity {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum AlertStatus {
+  PENDING
+  SENT
+  DELIVERED
+  READ
+  ACKNOWLEDGED
+  DISMISSED
+} 

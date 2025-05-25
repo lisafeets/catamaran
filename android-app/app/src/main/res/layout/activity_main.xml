@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/Layout.Catamaran.Screen">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- App Header -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Catamaran Family Watch"
+            android:textAppearance="@style/TextAppearance.Catamaran.Headline"
+            android:gravity="center"
+            android:layout_marginBottom="32dp" />
+
+        <!-- Status Card -->
+        <androidx.cardview.widget.CardView
+            style="@style/Card.Catamaran.Status">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_status"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="✅ Protecting Your Family"
+                    android:textAppearance="@style/TextAppearance.Catamaran.Status"
+                    android:textColor="@color/status_active"
+                    android:gravity="center"
+                    android:layout_marginBottom="12dp" />
+
+                <TextView
+                    android:id="@+id/tv_status_details"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Catamaran is watching for suspicious calls and messages"
+                    android:textAppearance="@style/TextAppearance.Catamaran.Body"
+                    android:gravity="center" />
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Today's Activity Card -->
+        <androidx.cardview.widget.CardView
+            style="@style/Card.Catamaran">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_today_stats"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Today:\n📞 4 calls shared with family\n💬 7 messages shared with family\n🛡️ 0 suspicious activity detected"
+                    android:textAppearance="@style/TextAppearance.Catamaran.Body"
+                    android:lineSpacingExtra="8dp" />
+
+                <Button
+                    android:id="@+id/btn_view_activity"
+                    style="@style/Button.Catamaran.Secondary"
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="16dp"
+                    android:text="View All Activity" />
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Main Action Button -->
+        <Button
+            android:id="@+id/btn_toggle_protection"
+            style="@style/Button.Catamaran.Primary"
+            android:layout_width="match_parent"
+            android:layout_height="72dp"
+            android:text="Start Protection"
+            android:textSize="22sp"
+            android:layout_marginVertical="16dp" />
+
+        <!-- Quick Actions -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            style="@style/Layout.Catamaran.Section">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Quick Actions"
+                android:textAppearance="@style/TextAppearance.Catamaran.Title"
+                android:layout_marginBottom="16dp" />
+
+            <Button
+                android:id="@+id/btn_call_family"
+                style="@style/Button.Catamaran.Secondary"
+                android:layout_width="match_parent"
+                android:text="📞 Call Sarah"
+                android:drawableStart="@drawable/ic_phone"
+                android:drawablePadding="16dp" />
+
+            <Button
+                android:id="@+id/btn_settings"
+                style="@style/Button.Catamaran.Secondary"
+                android:layout_width="match_parent"
+                android:text="⚙️ Settings"
+                android:drawableStart="@drawable/ic_settings"
+                android:drawablePadding="16dp" />
+
+            <Button
+                android:id="@+id/btn_need_help"
+                style="@style/Button.Catamaran.Secondary"
+                android:layout_width="match_parent"
+                android:text="❓ Need Help?"
+                android:drawableStart="@drawable/ic_help"
+                android:drawablePadding="16dp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView> 

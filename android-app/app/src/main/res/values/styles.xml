@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Senior-friendly theme -->
+    <style name="Theme.Catamaran" parent="Theme.Material3.Light">
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorOnPrimary">@color/text_white</item>
+        <item name="colorSurface">@color/background_card</item>
+        <item name="colorOnSurface">@color/text_primary</item>
+        <item name="android:colorBackground">@color/background_primary</item>
+        <item name="colorOnBackground">@color/text_primary</item>
+        
+        <!-- Large text for seniors -->
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/text_primary</item>
+    </style>
+
+    <!-- Senior-friendly text styles -->
+    <style name="TextAppearance.Catamaran.Headline" parent="TextAppearance.Material3.HeadlineMedium">
+        <item name="android:textSize">32sp</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextAppearance.Catamaran.Title" parent="TextAppearance.Material3.TitleLarge">
+        <item name="android:textSize">28sp</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextAppearance.Catamaran.Body" parent="TextAppearance.Material3.BodyLarge">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:lineSpacingExtra">4dp</item>
+    </style>
+
+    <style name="TextAppearance.Catamaran.BodySecondary" parent="TextAppearance.Material3.BodyMedium">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/text_secondary</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:lineSpacingExtra">2dp</item>
+    </style>
+
+    <style name="TextAppearance.Catamaran.Status" parent="TextAppearance.Material3.TitleMedium">
+        <item name="android:textSize">24sp</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:lineSpacingExtra">4dp</item>
+    </style>
+
+    <!-- Senior-friendly button styles -->
+    <style name="Button.Catamaran.Primary" parent="Widget.Material3.Button">
+        <item name="android:layout_height">64dp</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/text_white</item>
+        <item name="backgroundTint">@color/button_primary</item>
+        <item name="android:layout_marginHorizontal">16dp</item>
+        <item name="android:layout_marginVertical">8dp</item>
+        <item name="cornerRadius">12dp</item>
+        <item name="android:minHeight">64dp</item>
+        <item name="android:paddingHorizontal">24dp</item>
+        <item name="android:paddingVertical">16dp</item>
+    </style>
+
+    <style name="Button.Catamaran.Secondary" parent="Widget.Material3.Button.TonalButton">
+        <item name="android:layout_height">64dp</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/primary</item>
+        <item name="backgroundTint">@color/button_secondary</item>
+        <item name="android:layout_marginHorizontal">16dp</item>
+        <item name="android:layout_marginVertical">8dp</item>
+        <item name="cornerRadius">12dp</item>
+        <item name="android:minHeight">64dp</item>
+        <item name="android:paddingHorizontal">24dp</item>
+        <item name="android:paddingVertical">16dp</item>
+    </style>
+
+    <style name="Button.Catamaran.Positive" parent="Button.Catamaran.Primary">
+        <item name="backgroundTint">@color/button_positive</item>
+    </style>
+
+    <style name="Button.Catamaran.Negative" parent="Button.Catamaran.Primary">
+        <item name="backgroundTint">@color/button_negative</item>
+    </style>
+
+    <!-- Card styles -->
+    <style name="Card.Catamaran" parent="Widget.Material3.CardView.Elevated">
+        <item name="cardBackgroundColor">@color/background_card</item>
+        <item name="cardElevation">4dp</item>
+        <item name="cardCornerRadius">16dp</item>
+        <item name="android:layout_margin">16dp</item>
+        <item name="contentPadding">24dp</item>
+    </style>
+
+    <style name="Card.Catamaran.Status" parent="Card.Catamaran">
+        <item name="cardElevation">2dp</item>
+        <item name="contentPadding">20dp</item>
+    </style>
+
+    <!-- Toggle switch style -->
+    <style name="Switch.Catamaran" parent="Widget.Material3.CompoundButton.Switch">
+        <item name="android:layout_height">48dp</item>
+        <item name="android:minHeight">48dp</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:padding">12dp</item>
+    </style>
+
+    <!-- Layout styles for consistent spacing -->
+    <style name="Layout.Catamaran.Screen">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:padding">20dp</item>
+        <item name="android:background">@color/background_primary</item>
+    </style>
+
+    <style name="Layout.Catamaran.Section">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginVertical">16dp</item>
+    </style>
+</resources> 

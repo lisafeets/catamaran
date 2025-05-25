@@ -1,0 +1,38 @@
+{
+  "name": "backend-api",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@prisma/client": "^6.8.2",
+    "@types/node": "^22.15.21",
+    "bcrypt": "^6.0.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "express-rate-limit": "^7.5.0",
+    "express-validator": "^7.2.1",
+    "helmet": "^8.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "prisma": "^6.8.2",
+    "winston": "^3.17.0",
+    "ws": "^8.18.2",
+    "zod": "^3.25.28"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "@types/cors": "^2.8.18",
+    "@types/express": "^5.0.2",
+    "@types/jsonwebtoken": "^9.0.9",
+    "@types/ws": "^8.18.1",
+    "nodemon": "^3.1.10",
+    "tsx": "^4.19.4",
+    "typescript": "^5.8.3"
+  }
+}

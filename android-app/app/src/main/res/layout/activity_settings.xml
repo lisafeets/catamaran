@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/Layout.Catamaran.Screen">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Header with back button -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="32dp">
+
+            <Button
+                android:id="@+id/btn_back"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:text="← Back"
+                style="@style/Button.Catamaran.Secondary"
+                android:layout_marginEnd="16dp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Settings"
+                android:textAppearance="@style/TextAppearance.Catamaran.Headline"
+                android:gravity="center" />
+
+        </LinearLayout>
+
+        <!-- Family Watch Toggle Section -->
+        <androidx.cardview.widget.CardView
+            style="@style/Card.Catamaran">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="16dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Family Watch"
+                        android:textAppearance="@style/TextAppearance.Catamaran.Title" />
+
+                    <Switch
+                        android:id="@+id/switch_family_watch"
+                        style="@style/Switch.Catamaran"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="true" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tv_family_watch_status"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="✅ Family Watch is ON\nYour family can see when you get calls and messages"
+                    android:textAppearance="@style/TextAppearance.Catamaran.Body"
+                    android:textColor="@color/status_active"
+                    android:lineSpacingExtra="4dp" />
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Family Members Section -->
+        <androidx.cardview.widget.CardView
+            style="@style/Card.Catamaran">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Family Members"
+                    android:textAppearance="@style/TextAppearance.Catamaran.Title"
+                    android:layout_marginBottom="16dp" />
+
+                <TextView
+                    android:id="@+id/tv_family_members"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Who gets updates:\n• Sarah (Daughter) ✓\n• Michael (Son) ✓"
+                    android:textAppearance="@style/TextAppearance.Catamaran.Body"
+                    android:layout_marginBottom="20dp"
+                    android:lineSpacingExtra="4dp" />
+
+                <Button
+                    android:id="@+id/btn_manage_family"
+                    style="@style/Button.Catamaran.Secondary"
+                    android:layout_width="match_parent"
+                    android:text="👥 Add or Remove Family Members" />
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Information and Help Section -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            style="@style/Layout.Catamaran.Section">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Information & Help"
+                android:textAppearance="@style/TextAppearance.Catamaran.Title"
+                android:layout_marginBottom="16dp" />
+
+            <Button
+                android:id="@+id/btn_privacy_info"
+                style="@style/Button.Catamaran.Secondary"
+                android:layout_width="match_parent"
+                android:text="🔒 Privacy Information"
+                android:drawableStart="@drawable/ic_privacy"
+                android:drawablePadding="16dp" />
+
+            <Button
+                android:id="@+id/btn_get_help"
+                style="@style/Button.Catamaran.Secondary"
+                android:layout_width="match_parent"
+                android:text="❓ Get Help"
+                android:drawableStart="@drawable/ic_help"
+                android:drawablePadding="16dp" />
+
+        </LinearLayout>
+
+        <!-- Emergency Section -->
+        <androidx.cardview.widget.CardView
+            style="@style/Card.Catamaran"
+            android:layout_marginTop="24dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="⚠️ Emergency Options"
+                    android:textAppearance="@style/TextAppearance.Catamaran.Title"
+                    android:textColor="@color/status_warning"
+                    android:layout_marginBottom="16dp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="This will turn off all monitoring and remove all family connections. Only use if you want to stop using Catamaran completely."
+                    android:textAppearance="@style/TextAppearance.Catamaran.BodySecondary"
+                    android:layout_marginBottom="20dp" />
+
+                <Button
+                    android:id="@+id/btn_turn_off_everything"
+                    style="@style/Button.Catamaran.Negative"
+                    android:layout_width="match_parent"
+                    android:text="🚨 Turn Off Everything" />
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
+
+</ScrollView> 

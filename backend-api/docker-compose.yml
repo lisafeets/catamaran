@@ -1,0 +1,187 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: catamaran-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: catamaran_db
+      POSTGRES_USER: catamaran_user
+      POSTGRES_PASSWORD: catamaran_secure_password
+      POSTGRES_INITDB_ARGS: "--encoding=UTF-8 --lc-collate=C --lc-ctype=C"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./scripts/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+    ports:
+      - "5432:5432"
+    networks:
+      - catamaran-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U catamaran_user -d catamaran_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis for caching and session storage
+  redis:
+    image: redis:7-alpine
+    container_name: catamaran-redis
+    restart: unless-stopped
+    command: redis-server --appendonly yes --requirepass catamaran_redis_password
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+    networks:
+      - catamaran-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+  # Catamaran API Server
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    container_name: catamaran-api
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      DATABASE_URL: postgresql://catamaran_user:catamaran_secure_password@postgres:5432/catamaran_db
+      REDIS_URL: redis://:catamaran_redis_password@redis:6379
+      
+      # JWT Configuration (use strong secrets in production)
+      JWT_SECRET: your-super-secure-jwt-secret-key-here-min-32-chars-production
+      JWT_REFRESH_SECRET: your-super-secure-refresh-secret-key-here-min-32-chars-production
+      JWT_ACCESS_EXPIRY: 15m
+      JWT_REFRESH_EXPIRY: 7d
+      
+      # Encryption Configuration
+      ENCRYPTION_KEY: your-32-char-encryption-key-prod12
+      ENCRYPTION_ALGORITHM: aes-256-gcm
+      
+      # Security Configuration
+      BCRYPT_ROUNDS: 12
+      API_KEY_SECRET: your-api-key-for-mobile-app-production
+      
+      # Rate Limiting
+      RATE_LIMIT_WINDOW_MS: 900000
+      RATE_LIMIT_MAX_REQUESTS: 100
+      
+      # CORS Configuration
+      CORS_ORIGIN: https://dashboard.catamaran.app,https://app.catamaran.app
+      
+      # Data Retention
+      DATA_RETENTION_DAYS: 30
+      AUDIT_LOG_RETENTION_DAYS: 90
+      
+      # WebSocket Configuration
+      WS_HEARTBEAT_INTERVAL: 30000
+      WS_CONNECTION_TIMEOUT: 60000
+      
+    ports:
+      - "3000:3000"
+    volumes:
+      - api_logs:/app/logs
+    networks:
+      - catamaran-network
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Nginx Reverse Proxy (optional, for production)
+  nginx:
+    image: nginx:alpine
+    container_name: catamaran-nginx
+    restart: unless-stopped
+    depends_on:
+      - api
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/ssl:/etc/nginx/ssl:ro
+      - nginx_logs:/var/log/nginx
+    networks:
+      - catamaran-network
+    profiles:
+      - production
+
+# Development override
+  api-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: catamaran-api-dev
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      NODE_ENV: development
+      PORT: 3000
+      DATABASE_URL: postgresql://catamaran_user:catamaran_secure_password@postgres:5432/catamaran_db
+      
+      # Development JWT secrets (not for production)
+      JWT_SECRET: dev-jwt-secret-key-32-characters-long
+      JWT_REFRESH_SECRET: dev-refresh-secret-key-32-characters-long
+      JWT_ACCESS_EXPIRY: 15m
+      JWT_REFRESH_EXPIRY: 7d
+      
+      # Development encryption key
+      ENCRYPTION_KEY: dev-encryption-key-32-chars-long
+      ENCRYPTION_ALGORITHM: aes-256-gcm
+      
+      # Development security
+      BCRYPT_ROUNDS: 10
+      API_KEY_SECRET: dev-api-key-secret
+      
+      # Rate limiting (more lenient for development)
+      RATE_LIMIT_WINDOW_MS: 900000
+      RATE_LIMIT_MAX_REQUESTS: 1000
+      
+      # CORS (allow localhost)
+      CORS_ORIGIN: http://localhost:3001,http://localhost:3000
+      
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - api_logs:/app/logs
+    networks:
+      - catamaran-network
+    profiles:
+      - development
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+  api_logs:
+    driver: local
+  nginx_logs:
+    driver: local
+
+networks:
+  catamaran-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16 

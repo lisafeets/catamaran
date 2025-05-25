@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="16dp"
+    style="@style/Card.Catamaran.Status">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Member Info -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="12dp">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_member_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Sarah Johnson"
+                    android:textAppearance="@style/TextAppearance.Catamaran.Title"
+                    android:layout_marginBottom="4dp" />
+
+                <TextView
+                    android:id="@+id/tv_member_relationship"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Daughter"
+                    android:textAppearance="@style/TextAppearance.Catamaran.BodySecondary"
+                    android:layout_marginBottom="4dp" />
+
+                <TextView
+                    android:id="@+id/tv_member_email"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="sarah.johnson@email.com"
+                    android:textAppearance="@style/TextAppearance.Catamaran.BodySecondary" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_member_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="✅ Getting updates"
+                android:textAppearance="@style/TextAppearance.Catamaran.Body"
+                android:textColor="@color/status_active"
+                android:layout_marginStart="16dp" />
+
+        </LinearLayout>
+
+        <!-- Action Buttons -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <Button
+                android:id="@+id/btn_toggle_member"
+                style="@style/Button.Catamaran.Secondary"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_marginEnd="8dp"
+                android:text="Turn Off Updates"
+                android:textSize="16sp" />
+
+            <Button
+                android:id="@+id/btn_remove_member"
+                style="@style/Button.Catamaran.Negative"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_marginStart="8dp"
+                android:text="Remove"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView> 

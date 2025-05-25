@@ -1,0 +1,131 @@
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
+    id 'androidx.navigation.safeargs.kotlin'
+    id 'kotlinx-serialization'
+}
+
+android {
+    namespace 'com.catamaran.app'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "com.catamaran.app"
+        minSdk 26  // Android 8.0+ for better security features
+        targetSdk 34
+        versionCode 1
+        versionName "1.0.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        
+        // Security configurations
+        buildConfigField "String", "API_BASE_URL", '"https://api.catamaran.app"'
+        buildConfigField "boolean", "DEBUG_MODE", "false"
+    }
+
+    buildTypes {
+        debug {
+            debuggable true
+            minifyEnabled false
+            buildConfigField "boolean", "DEBUG_MODE", "true"
+            buildConfigField "String", "API_BASE_URL", '"http://10.0.2.2:3000"'
+        }
+        
+        release {
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            
+            // Security hardening
+            debuggable false
+            jniDebuggable false
+            renderscriptDebuggable false
+            zipAlignEnabled true
+        }
+    }
+    
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+    
+    buildFeatures {
+        viewBinding true
+        buildConfig true
+    }
+    
+    // Security configurations
+    packagingOptions {
+        pickFirst '**/libc++_shared.so'
+        pickFirst '**/libjsc.so'
+    }
+}
+
+dependencies {
+    // Core Android
+    implementation 'androidx.core:core-ktx:1.12.0'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.10.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
+    
+    // Lifecycle & ViewModel
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-service:$lifecycle_version"
+    
+    // Navigation
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.7.4'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.7.4'
+    
+    // Room Database
+    implementation "androidx.room:room-runtime:$room_version"
+    implementation "androidx.room:room-ktx:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
+    
+    // Coroutines
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
+    
+    // Networking
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
+    implementation "com.squareup.okhttp3:okhttp:$okhttp_version"
+    implementation "com.squareup.okhttp3:logging-interceptor:$okhttp_version"
+    
+    // Enhanced networking for background services
+    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0'
+    implementation 'com.squareup.okhttp3:okhttp-brotli:4.11.0'
+    
+    // Security & Encryption
+    implementation 'androidx.security:security-crypto:1.1.0-alpha06'
+    implementation 'net.zetetic:android-database-sqlcipher:4.5.4'
+    
+    // Work Manager (for background tasks)
+    implementation 'androidx.work:work-runtime-ktx:2.8.1'
+    
+    // Background service enhancements
+    implementation 'androidx.lifecycle:lifecycle-service:2.7.0'
+    implementation 'androidx.startup:startup-runtime:1.1.1'
+    
+    // Permissions
+    implementation 'com.karumi:dexter:6.2.3'
+    
+    // JSON parsing
+    implementation 'com.google.code.gson:gson:2.10.1'
+    
+    // Date/Time
+    implementation 'com.jakewharton.threetenabp:threetenabp:1.4.6'
+    
+    // Testing
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    androidTestImplementation "androidx.room:room-testing:$room_version"
+} 

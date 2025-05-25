@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Senior-friendly high contrast color scheme -->
+    
+    <!-- Primary colors - dark blue for trust and stability -->
+    <color name="primary">#1565C0</color>
+    <color name="primary_dark">#0D47A1</color>
+    <color name="primary_light">#E3F2FD</color>
+    
+    <!-- Accent colors -->
+    <color name="accent_green">#2E7D32</color>
+    <color name="accent_red">#C62828</color>
+    <color name="accent_orange">#F57C00</color>
+    
+    <!-- Background colors - high contrast -->
+    <color name="background_primary">#FFFFFF</color>
+    <color name="background_secondary">#F8F9FA</color>
+    <color name="background_card">#FFFFFF</color>
+    
+    <!-- Text colors - high contrast for readability -->
+    <color name="text_primary">#212121</color>
+    <color name="text_secondary">#424242</color>
+    <color name="text_hint">#757575</color>
+    <color name="text_white">#FFFFFF</color>
+    
+    <!-- Status colors -->
+    <color name="status_active">#2E7D32</color>
+    <color name="status_inactive">#757575</color>
+    <color name="status_warning">#F57C00</color>
+    <color name="status_error">#C62828</color>
+    
+    <!-- Button colors -->
+    <color name="button_primary">#1565C0</color>
+    <color name="button_primary_pressed">#0D47A1</color>
+    <color name="button_secondary">#E3F2FD</color>
+    <color name="button_positive">#2E7D32</color>
+    <color name="button_negative">#C62828</color>
+    
+    <!-- Border and divider colors -->
+    <color name="border_light">#E0E0E0</color>
+    <color name="border_medium">#BDBDBD</color>
+    <color name="divider">#E0E0E0</color>
+    
+    <!-- Material Design 3 colors -->
+    <color name="md_theme_light_primary">#1565C0</color>
+    <color name="md_theme_light_on_primary">#FFFFFF</color>
+    <color name="md_theme_light_surface">#FFFFFF</color>
+    <color name="md_theme_light_on_surface">#212121</color>
+    <color name="md_theme_light_background">#FFFFFF</color>
+    <color name="md_theme_light_on_background">#212121</color>
+</resources> 

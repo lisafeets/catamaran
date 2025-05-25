@@ -1,0 +1,37 @@
+<resources>
+    <string name="app_name">Family Safety Monitor</string>
+    
+    <!-- Main Activity -->
+    <string name="start_monitoring">Start Monitoring</string>
+    <string name="stop_monitoring">Stop Monitoring</string>
+    <string name="login">Login</string>
+    <string name="logout">Logout</string>
+    <string name="grant_permissions">Grant Permissions</string>
+    <string name="export_data">Export Data</string>
+    
+    <!-- Status Messages -->
+    <string name="status_logged_in">✓ Logged in</string>
+    <string name="status_not_logged_in">Not logged in</string>
+    <string name="status_monitoring_active">✓ Monitoring Active</string>
+    <string name="status_monitoring_inactive">Monitoring Inactive</string>
+    <string name="status_permissions_granted">✓ Permissions Granted</string>
+    <string name="status_permissions_required">Permissions Required</string>
+    
+    <!-- Toast Messages -->
+    <string name="monitoring_started">Monitoring started</string>
+    <string name="monitoring_stopped">Monitoring stopped</string>
+    <string name="login_successful">Login successful</string>
+    <string name="login_failed">Login failed</string>
+    <string name="logged_out">Logged out</string>
+    <string name="permissions_granted">Permissions granted</string>
+    <string name="permissions_required_message">Permissions are required for family safety monitoring</string>
+    <string name="please_login_first">Please login first</string>
+    
+    <!-- Notification -->
+    <string name="notification_title">Family Safety Active</string>
+    <string name="notification_text">Monitoring phone activity for family safety</string>
+    
+    <!-- Information -->
+    <string name="how_it_works_title">How it works</string>
+    <string name="how_it_works_description">• Monitors phone calls and text messages\n• Keeps your family informed about your activity\n• Data is securely stored and encrypted\n• Works in the background automatically</string>
+</resources> 

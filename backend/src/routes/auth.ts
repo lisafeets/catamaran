@@ -49,15 +49,19 @@ const loginValidation = [
 
 // Helper function to generate JWT tokens
 const generateTokens = (user: { id: string; email: string; role: string }) => {
+  // Fallback secrets for Railway deployment if not configured
+  const JWT_SECRET = process.env.JWT_SECRET || 'catamaran-default-jwt-secret-for-testing-only-change-in-production';
+  const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || 'catamaran-default-refresh-secret-for-testing-only-change-in-production';
+  
   const accessToken = jwt.sign(
     { id: user.id, email: user.email, role: user.role },
-    process.env.JWT_SECRET as string,
+    JWT_SECRET,
     { expiresIn: '15m' }
   );
 
   const refreshToken = jwt.sign(
     { id: user.id, email: user.email, role: user.role },
-    process.env.JWT_REFRESH_SECRET as string,
+    JWT_REFRESH_SECRET,
     { expiresIn: '7d' }
   );
 

@@ -1,0 +1,133 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  SENIOR
+  FAMILY_MEMBER
+  ADMIN
+}
+
+enum RelationshipType {
+  CHILD
+  SPOUSE
+  PARENT
+  SIBLING
+  CAREGIVER
+  OTHER
+}
+
+model User {
+  id            String   @id @default(cuid())
+  email         String   @unique
+  password      String
+  firstName     String?
+  lastName      String?
+  phone         String?
+  role          UserRole @default(FAMILY_MEMBER)
+  isActive      Boolean  @default(true)
+  emailVerified Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  lastLoginAt   DateTime?
+
+  // Family relationships where this user is the senior
+  familyConnections FamilyConnection[] @relation("SeniorUser")
+  
+  // Family relationships where this user is the family member
+  familyMemberships FamilyConnection[] @relation("FamilyUser")
+  
+  // Call logs for this user (if they are a senior)
+  callLogs CallLog[]
+  
+  // SMS logs for this user (if they are a senior)
+  smsLogs  SmsLog[]
+
+  // Refresh tokens for this user
+  refreshTokens RefreshToken[]
+
+  @@map("users")
+}
+
+model FamilyConnection {
+  id           String           @id @default(cuid())
+  seniorId     String
+  familyId     String
+  relationship RelationshipType
+  isActive     Boolean          @default(true)
+  connectedAt  DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+
+  // Relations
+  senior User @relation("SeniorUser", fields: [seniorId], references: [id], onDelete: Cascade)
+  family User @relation("FamilyUser", fields: [familyId], references: [id], onDelete: Cascade)
+
+  // Unique constraint to prevent duplicate connections
+  @@unique([seniorId, familyId])
+  @@map("family_connections")
+}
+
+model CallLog {
+  id           String   @id @default(cuid())
+  seniorId     String
+  phoneNumber  String   // Hashed phone number for privacy
+  contactName  String?  // Encrypted contact name if available
+  duration     Int      // Call duration in seconds
+  timestamp    DateTime
+  callType     String   // "incoming", "outgoing", "missed"
+  riskScore    Float    @default(0.0)
+  isKnownContact Boolean @default(false)
+  createdAt    DateTime @default(now())
+
+  // Relations
+  senior User @relation(fields: [seniorId], references: [id], onDelete: Cascade)
+
+  // Index for efficient queries
+  @@index([seniorId, timestamp])
+  @@index([phoneNumber])
+  @@map("call_logs")
+}
+
+model SmsLog {
+  id           String   @id @default(cuid())
+  seniorId     String
+  senderNumber String   // Hashed phone number for privacy
+  contactName  String?  // Encrypted contact name if available
+  messageCount Int      @default(1) // Number of messages in conversation
+  timestamp    DateTime
+  messageType  String   // "received", "sent"
+  riskScore    Float    @default(0.0)
+  isKnownContact Boolean @default(false)
+  hasLink      Boolean  @default(false)
+  createdAt    DateTime @default(now())
+
+  // Relations
+  senior User @relation(fields: [seniorId], references: [id], onDelete: Cascade)
+
+  // Index for efficient queries
+  @@index([seniorId, timestamp])
+  @@index([senderNumber])
+  @@map("sms_logs")
+}
+
+model RefreshToken {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  userId    String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  isRevoked Boolean  @default(false)
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("refresh_tokens")
+} 

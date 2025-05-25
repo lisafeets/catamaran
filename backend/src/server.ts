@@ -6,6 +6,11 @@ import rateLimit from 'express-rate-limit';
 import dotenv from 'dotenv';
 import { PrismaClient } from '@prisma/client';
 
+// Import routes
+import authRoutes from './routes/auth';
+import activityRoutes from './routes/activity';
+import familyRoutes from './routes/family';
+
 // Load environment variables first
 dotenv.config();
 
@@ -150,30 +155,11 @@ app.get('/api/test', (req, res) => {
 try {
   console.log('🛣️ Loading API routes...');
   
-  // Dynamically import routes with error handling
-  Promise.all([
-    import('./routes/auth').catch(err => {
-      console.warn('⚠️ Auth routes not found, skipping...', err.message);
-      return null;
-    }),
-    import('./routes/activity').catch(err => {
-      console.warn('⚠️ Activity routes not found, skipping...', err.message);
-      return null;
-    }),
-    import('./routes/family').catch(err => {
-      console.warn('⚠️ Family routes not found, skipping...', err.message);
-      return null;
-    })
-  ]).then(([authRoutes, activityRoutes, familyRoutes]) => {
-    if (authRoutes?.default) app.use('/api/auth', authRoutes.default);
-    if (activityRoutes?.default) app.use('/api/activity', activityRoutes.default);
-    if (familyRoutes?.default) app.use('/api/family', familyRoutes.default);
-    
-    console.log('✅ API routes loaded');
-  }).catch(error => {
-    console.error('❌ Failed to load routes:', error);
-  });
-
+  if (authRoutes) app.use('/api/auth', authRoutes);
+  if (activityRoutes) app.use('/api/activity', activityRoutes);
+  if (familyRoutes) app.use('/api/family', familyRoutes);
+  
+  console.log('✅ API routes loaded');
 } catch (error) {
   console.error('❌ Route setup failed:', error);
   // Don't exit - continue with basic server

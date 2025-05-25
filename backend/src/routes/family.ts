@@ -285,7 +285,7 @@ router.get('/seniors', authenticateToken, asyncHandler(async (req, res) => {
       const yesterday = new Date();
       yesterday.setDate(yesterday.getDate() - 1);
 
-      const [callCount, smsCount, highRiskCount] = await Promise.all([
+      const [callCount, smsCount, callRiskCount, smsRiskCount] = await Promise.all([
         prisma.callLog.count({
           where: {
             seniorId,
@@ -304,7 +304,8 @@ router.get('/seniors', authenticateToken, asyncHandler(async (req, res) => {
             riskScore: { gte: 0.7 },
             timestamp: { gte: yesterday }
           }
-        }) + await prisma.smsLog.count({
+        }),
+        prisma.smsLog.count({
           where: {
             seniorId,
             riskScore: { gte: 0.7 },
@@ -312,6 +313,8 @@ router.get('/seniors', authenticateToken, asyncHandler(async (req, res) => {
           }
         })
       ]);
+
+      const highRiskCount = callRiskCount + smsRiskCount;
 
       return {
         ...connection,

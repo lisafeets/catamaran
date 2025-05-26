@@ -84,6 +84,44 @@ const calculateRiskScore = (activity: any, type: 'call' | 'sms'): number => {
   return Math.min(score, 1.0); // Cap at 1.0
 };
 
+// POST /api/activity/create-test-user - Create test user for testing
+router.post('/create-test-user', asyncHandler(async (req, res) => {
+  try {
+    const user = await prisma.user.upsert({
+      where: { email: 'test@example.com' },
+      update: {
+        id: 'test-user-123',
+        role: 'SENIOR'
+      },
+      create: {
+        id: 'test-user-123',
+        email: 'test@example.com',
+        password: 'dummy-password',
+        firstName: 'Test',
+        lastName: 'User',
+        role: 'SENIOR'
+      }
+    });
+
+    res.json({
+      success: true,
+      message: 'Test user created/updated',
+      user: {
+        id: user.id,
+        email: user.email,
+        role: user.role
+      }
+    });
+  } catch (error) {
+    logger.error('Error creating test user', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to create test user',
+      error: error instanceof Error ? error.message : 'Unknown error'
+    });
+  }
+}));
+
 // POST /api/activity/sync - Android app uploads activity data
 // TEMPORARILY DISABLED AUTH FOR TESTING
 router.post('/sync', activitySyncValidation, asyncHandler(async (req, res) => {

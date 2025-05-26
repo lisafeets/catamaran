@@ -25,8 +25,8 @@ class MonitoringService : LifecycleService() {
     companion object {
         private const val NOTIFICATION_ID = 1001
         private const val CHANNEL_ID = "catamaran_monitoring"
-        private const val MONITORING_INTERVAL_MINUTES = 5L
-        private const val SYNC_INTERVAL_MINUTES = 15L
+        private const val MONITORING_INTERVAL_MINUTES = 1L
+        private const val SYNC_INTERVAL_MINUTES = 1L
         
         // Service actions
         const val ACTION_START_MONITORING = "start_monitoring"

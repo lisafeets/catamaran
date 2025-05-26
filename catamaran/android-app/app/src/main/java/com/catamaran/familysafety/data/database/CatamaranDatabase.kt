@@ -9,7 +9,7 @@ import com.catamaran.familysafety.data.model.SMSEntry
 
 @Database(
     entities = [CallLogEntry::class, SMSEntry::class],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 abstract class CatamaranDatabase : RoomDatabase() {

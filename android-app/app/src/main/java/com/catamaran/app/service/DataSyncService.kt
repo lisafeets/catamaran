@@ -32,10 +32,9 @@ class DataSyncService(
     companion object {
         private const val MAX_SYNC_BATCH_SIZE = 50
         private const val MAX_RETRY_ATTEMPTS = 3
-        private const val SYNC_API_ENDPOINT = "https://api.catamaran.family/v1/sync"
-        private const val CALL_LOGS_ENDPOINT = "$SYNC_API_ENDPOINT/call-logs"
-        private const val SMS_LOGS_ENDPOINT = "$SYNC_API_ENDPOINT/sms-logs"
-        private const val BATCH_ENDPOINT = "$SYNC_API_ENDPOINT/batch"
+        private const val SYNC_API_ENDPOINT = "https://catamaran-production-3422.up.railway.app/api/activity"
+        private const val ACTIVITY_SYNC_ENDPOINT = "$SYNC_API_ENDPOINT/sync"
+        private const val BATCH_ENDPOINT = "$SYNC_API_ENDPOINT/sync"
     }
 
     private val networkUtils = NetworkUtils(context)
@@ -281,48 +280,39 @@ class DataSyncService(
         try {
             Logger.debug("Uploading ${callLogs.size} call logs to backend")
             
-            // Convert to sync DTOs (decrypt data for transmission)
-            val syncData = callLogs.map { callLog ->
-                CallLogSyncDto(
-                    id = callLog.id,
-                    phoneNumber = encryptionManager.decrypt(callLog.phoneNumber),
-                    contactName = callLog.contactName?.let { encryptionManager.decrypt(it) },
-                    duration = callLog.duration,
-                    callType = callLog.callType,
-                    timestamp = callLog.timestamp,
-                    isKnownContact = callLog.isKnownContact,
-                    riskScore = callLog.riskScore,
-                    suspiciousPatterns = callLog.suspiciousPatterns,
-                    createdAt = callLog.createdAt
+            // Convert to Railway backend format
+            val callLogsData = callLogs.map { callLog ->
+                mapOf(
+                    "phoneNumber" to encryptionManager.decrypt(callLog.phoneNumber),
+                    "contactName" to callLog.contactName?.let { encryptionManager.decrypt(it) },
+                    "duration" to callLog.duration,
+                    "callType" to callLog.callType.name.lowercase(),
+                    "timestamp" to java.time.Instant.ofEpochMilli(callLog.timestamp).toString(),
+                    "isKnownContact" to callLog.isKnownContact
                 )
             }
             
-            // Create sync request
-            val syncRequest = SyncRequest(
-                deviceId = getDeviceId(),
-                userId = getUserId(),
-                timestamp = System.currentTimeMillis(),
-                callLogs = syncData,
-                smsLogs = emptyList()
+            // Create request in Railway backend format
+            val requestData = mapOf(
+                "callLogs" to callLogsData,
+                "smsLogs" to emptyList<Map<String, Any>>()
             )
             
             // Serialize to JSON
-            val jsonData = json.encodeToString(syncRequest).toByteArray()
+            val jsonData = json.encodeToString(requestData).toByteArray()
             
-            // Create auth headers
+            // Create auth headers (simplified for testing)
             val headers = mapOf(
-                "Authorization" to "Bearer ${getAuthToken()}",
-                "Content-Type" to "application/json",
-                "X-Device-ID" to getDeviceId(),
-                "X-User-ID" to getUserId()
+                "Content-Type" to "application/json"
+                // TODO: Add proper authentication when available
             )
             
             // Upload with compression
             val result = networkUtils.uploadData(
-                endpoint = CALL_LOGS_ENDPOINT,
+                endpoint = ACTIVITY_SYNC_ENDPOINT,
                 data = jsonData,
                 headers = headers,
-                compressed = true
+                compressed = false // Disable compression for testing
             )
             
             return@withContext when (result) {
@@ -351,49 +341,43 @@ class DataSyncService(
         try {
             Logger.debug("Uploading ${smsLogs.size} SMS logs to backend")
             
-            // Convert to sync DTOs (decrypt data for transmission)
-            val syncData = smsLogs.map { smsLog ->
-                SmsLogSyncDto(
-                    id = smsLog.id,
-                    phoneNumber = encryptionManager.decrypt(smsLog.phoneNumber),
-                    contactName = smsLog.contactName?.let { encryptionManager.decrypt(it) },
-                    messageCount = smsLog.messageCount,
-                    smsType = smsLog.smsType.name,
-                    timestamp = smsLog.timestamp,
-                    isKnownContact = smsLog.isKnownContact,
-                    riskScore = smsLog.riskScore,
-                    frequencyPattern = smsLog.frequencyPattern?.let { encryptionManager.decrypt(it) },
-                    threadId = smsLog.threadId,
-                    createdAt = smsLog.createdAt
+            // Convert to Railway backend format
+            val smsLogsData = smsLogs.map { smsLog ->
+                mapOf(
+                    "senderNumber" to encryptionManager.decrypt(smsLog.phoneNumber), // Note: Railway expects 'senderNumber'
+                    "contactName" to smsLog.contactName?.let { encryptionManager.decrypt(it) },
+                    "messageCount" to smsLog.messageCount,
+                    "messageType" to when (smsLog.smsType) { // Note: Railway expects 'messageType'
+                        com.catamaran.app.data.database.entities.SmsType.INCOMING -> "received"
+                        com.catamaran.app.data.database.entities.SmsType.OUTGOING -> "sent"
+                    },
+                    "timestamp" to java.time.Instant.ofEpochMilli(smsLog.timestamp).toString(),
+                    "isKnownContact" to smsLog.isKnownContact,
+                    "hasLink" to false // Default for now
                 )
             }
             
-            // Create sync request
-            val syncRequest = SyncRequest(
-                deviceId = getDeviceId(),
-                userId = getUserId(),
-                timestamp = System.currentTimeMillis(),
-                callLogs = emptyList(),
-                smsLogs = syncData
+            // Create request in Railway backend format
+            val requestData = mapOf(
+                "callLogs" to emptyList<Map<String, Any>>(),
+                "smsLogs" to smsLogsData
             )
             
             // Serialize to JSON
-            val jsonData = json.encodeToString(syncRequest).toByteArray()
+            val jsonData = json.encodeToString(requestData).toByteArray()
             
-            // Create auth headers
+            // Create auth headers (simplified for testing)
             val headers = mapOf(
-                "Authorization" to "Bearer ${getAuthToken()}",
-                "Content-Type" to "application/json",
-                "X-Device-ID" to getDeviceId(),
-                "X-User-ID" to getUserId()
+                "Content-Type" to "application/json"
+                // TODO: Add proper authentication when available
             )
             
             // Upload with compression
             val result = networkUtils.uploadData(
-                endpoint = SMS_LOGS_ENDPOINT,
+                endpoint = ACTIVITY_SYNC_ENDPOINT,
                 data = jsonData,
                 headers = headers,
-                compressed = true
+                compressed = false // Disable compression for testing
             )
             
             return@withContext when (result) {

@@ -12,6 +12,7 @@ class SMSMonitor(private val context: Context) {
         
         try {
             val cutoffTime = System.currentTimeMillis() - (hoursBack * 60 * 60 * 1000)
+            android.util.Log.d("SMSMonitor", "Looking for SMS messages since: ${java.util.Date(cutoffTime)}")
             
             val projection = arrayOf(
                 "_id",
@@ -60,6 +61,8 @@ class SMSMonitor(private val context: Context) {
                         else -> "UNKNOWN"
                     }
                     
+                    android.util.Log.d("SMSMonitor", "Found SMS: id=$id, address=$address, type=$messageType, date=${java.util.Date(date)}")
+                    
                     smsEntries.add(
                         SMSEntry(
                             id = id,
@@ -79,6 +82,7 @@ class SMSMonitor(private val context: Context) {
             android.util.Log.e("SMSMonitor", "Error reading SMS", e)
         }
         
+        android.util.Log.d("SMSMonitor", "Returning ${smsEntries.size} SMS messages")
         return smsEntries
     }
     

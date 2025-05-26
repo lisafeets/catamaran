@@ -11,5 +11,6 @@ data class CallLogEntry(
     val callType: String, // INCOMING, OUTGOING, MISSED, REJECTED
     val timestamp: Long,
     val duration: Long, // in seconds
+    val isKnownContact: Boolean = false,
     val synced: Boolean = false
 ) 

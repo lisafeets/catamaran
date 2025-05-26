@@ -26,11 +26,11 @@ class SyncScheduler(
 ) {
 
     companion object {
-        // Sync interval configurations
-        private const val SYNC_INTERVAL_NORMAL_MINUTES = 15L
-        private const val SYNC_INTERVAL_WIFI_MINUTES = 5L
-        private const val SYNC_INTERVAL_CELLULAR_MINUTES = 30L
-        private const val SYNC_INTERVAL_LOW_BATTERY_MINUTES = 60L
+        // Sync interval configurations - TESTING MODE: Much more frequent
+        private const val SYNC_INTERVAL_NORMAL_MINUTES = 1L  // Changed from 15L to 1L for testing
+        private const val SYNC_INTERVAL_WIFI_MINUTES = 1L    // Changed from 5L to 1L for testing
+        private const val SYNC_INTERVAL_CELLULAR_MINUTES = 2L // Changed from 30L to 2L for testing
+        private const val SYNC_INTERVAL_LOW_BATTERY_MINUTES = 5L // Changed from 60L to 5L for testing
         
         // Activity thresholds for adaptive scheduling
         private const val HIGH_ACTIVITY_THRESHOLD = 10 // items per hour
@@ -38,7 +38,7 @@ class SyncScheduler(
         
         // Priority sync triggers
         private const val HIGH_RISK_SCORE_THRESHOLD = 8.0f
-        private const val CRITICAL_SYNC_DELAY_MINUTES = 2L
+        private const val CRITICAL_SYNC_DELAY_MINUTES = 0L // Changed from 2L to 0L for immediate testing
         
         // Battery levels
         private const val LOW_BATTERY_THRESHOLD = 20 // 20%

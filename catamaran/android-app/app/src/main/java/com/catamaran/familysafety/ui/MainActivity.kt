@@ -48,6 +48,13 @@ class MainActivity : AppCompatActivity() {
 
         // Initialize ViewModel
         val application = application as CatamaranApplication
+        
+        // TODO: Remove this temporary auth token - add proper login flow
+        if (!application.preferenceManager.isLoggedIn()) {
+            application.preferenceManager.setAuthToken("temp_token_for_testing")
+            application.preferenceManager.setUserId("temp_user_id")
+        }
+        
         val factory = MainViewModelFactory(application.repository, application.preferenceManager)
         viewModel = ViewModelProvider(this, factory)[MainViewModel::class.java]
 
@@ -122,8 +129,9 @@ class MainActivity : AppCompatActivity() {
             )
             binding.tvMonitoringStatus.text = "🛡️ Family Watch ACTIVE"
             binding.tvMonitoringStatus.setTextColor(
-                ContextCompat.getColor(this, R.color.success_green)
+                ContextCompat.getColor(this, android.R.color.white)
             )
+            binding.tvMonitoringStatus.setBackgroundResource(R.drawable.gradient_green_card)
             
             // Start monitoring service
             val intent = Intent(this, MonitoringService::class.java)
@@ -135,8 +143,9 @@ class MainActivity : AppCompatActivity() {
             )
             binding.tvMonitoringStatus.text = "⏸️ Family Watch INACTIVE"
             binding.tvMonitoringStatus.setTextColor(
-                ContextCompat.getColor(this, R.color.warning_orange)
+                ContextCompat.getColor(this, android.R.color.white)
             )
+            binding.tvMonitoringStatus.setBackgroundResource(R.drawable.gradient_blue_card)
             
             // Stop monitoring service
             val intent = Intent(this, MonitoringService::class.java)

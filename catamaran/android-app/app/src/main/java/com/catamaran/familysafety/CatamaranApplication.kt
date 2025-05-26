@@ -17,7 +17,7 @@ class CatamaranApplication : Application() {
     val database by lazy { CatamaranDatabase.getDatabase(this) }
     
     // Lazy initialization of repository
-    val repository by lazy { MonitoringRepository(database.monitoringDao(), ApiService.create()) }
+    val repository by lazy { MonitoringRepository(database.monitoringDao(), ApiService.create(preferenceManager)) }
     
     // Preference manager
     val preferenceManager by lazy { PreferenceManager(this) }

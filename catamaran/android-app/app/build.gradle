@@ -1,7 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
-    id 'kotlin-kapt'
+    id 'com.google.devtools.ksp'
 }
 
 android {
@@ -58,7 +58,7 @@ dependencies {
     // Room database
     implementation 'androidx.room:room-runtime:2.6.0'
     implementation 'androidx.room:room-ktx:2.6.0'
-    kapt 'androidx.room:room-compiler:2.6.0'
+    ksp 'androidx.room:room-compiler:2.6.0'
     
     // Retrofit for API calls
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'

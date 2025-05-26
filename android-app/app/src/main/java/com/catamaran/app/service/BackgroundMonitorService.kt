@@ -56,8 +56,8 @@ class BackgroundMonitorService : LifecycleService() {
         const val ACTION_CHECK_BATTERY_OPTIMIZATION = "check_battery_optimization"
         
         // Monitoring intervals
-        private const val HEALTH_CHECK_INTERVAL_MINUTES = 5L
-        private const val SYNC_INTERVAL_MINUTES = 15L
+        private const val HEALTH_CHECK_INTERVAL_MINUTES = 1L
+        private const val SYNC_INTERVAL_MINUTES = 1L
         private const val BATTERY_CHECK_INTERVAL_HOURS = 6L
         
         // Retry configuration
@@ -296,11 +296,14 @@ class BackgroundMonitorService : LifecycleService() {
                 callsMonitored += newCalls.size
                 Logger.info("Processed ${newCalls.size} new calls")
                 
-                // Trigger immediate sync for high-risk calls
+                // TESTING MODE: Trigger immediate sync for ALL new calls (not just high-risk)
+                Logger.info("Triggering immediate sync for ${newCalls.size} new calls (testing mode)")
+                triggerImmediateSync()
+                
+                // Also check for high-risk calls
                 val highRiskCalls = newCalls.filter { it.riskScore > 7 }
                 if (highRiskCalls.isNotEmpty()) {
-                    Logger.warning("Found ${highRiskCalls.size} high-risk calls - triggering immediate sync")
-                    triggerImmediateSync()
+                    Logger.warning("Found ${highRiskCalls.size} high-risk calls - already triggered immediate sync")
                 }
                 
                 updateNotification()
@@ -321,11 +324,14 @@ class BackgroundMonitorService : LifecycleService() {
                 smsMonitored += newSms.size
                 Logger.info("Processed ${newSms.size} new SMS")
                 
-                // Trigger immediate sync for suspicious SMS patterns
+                // TESTING MODE: Trigger immediate sync for ALL new SMS (not just high-risk)
+                Logger.info("Triggering immediate sync for ${newSms.size} new SMS messages (testing mode)")
+                triggerImmediateSync()
+                
+                // Also check for suspicious SMS patterns
                 val suspiciousSms = newSms.filter { it.riskScore > 7 }
                 if (suspiciousSms.isNotEmpty()) {
-                    Logger.warning("Found ${suspiciousSms.size} suspicious SMS - triggering immediate sync")
-                    triggerImmediateSync()
+                    Logger.warning("Found ${suspiciousSms.size} suspicious SMS - already triggered immediate sync")
                 }
                 
                 updateNotification()
@@ -450,15 +456,15 @@ class BackgroundMonitorService : LifecycleService() {
     }
 
     private fun scheduleWorkManagerTasks() {
-        // Data sync worker - runs every 15 minutes
+        // Data sync worker - runs every 1 minute for testing (changed from 15 minutes)
         val syncConstraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED)
             .setRequiresBatteryNotLow(false) // Allow when battery is low for critical sync
             .build()
         
         val syncWorkRequest = PeriodicWorkRequestBuilder<DataSyncWorker>(
-            15, TimeUnit.MINUTES,
-            5, TimeUnit.MINUTES // Flex interval
+            1, TimeUnit.MINUTES,  // Changed from 15 to 1 minute for testing
+            1, TimeUnit.MINUTES   // Changed flex interval from 5 to 1 minute for testing
         )
             .setConstraints(syncConstraints)
             .addTag("catamaran_monitoring")

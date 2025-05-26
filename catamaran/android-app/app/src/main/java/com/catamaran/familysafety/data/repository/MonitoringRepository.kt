@@ -4,15 +4,24 @@ import com.catamaran.familysafety.data.database.MonitoringDao
 import com.catamaran.familysafety.data.model.CallLogEntry
 import com.catamaran.familysafety.data.model.SMSEntry
 import com.catamaran.familysafety.network.ApiService
+import com.catamaran.familysafety.network.CallLogEntryAPI
+import com.catamaran.familysafety.network.SMSEntryAPI
+import com.catamaran.familysafety.network.ActivitySyncRequest
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.text.SimpleDateFormat
+import java.util.*
 
 class MonitoringRepository(
     private val dao: MonitoringDao,
     private val apiService: ApiService
 ) {
     
-    // Call Log operations
+    private val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US).apply {
+        timeZone = TimeZone.getTimeZone("UTC")
+    }
+    
+    // Call Log operations - Updated to use unified API
     suspend fun syncCallLogs(callLogs: List<CallLogEntry>) = withContext(Dispatchers.IO) {
         try {
             // Store locally first
@@ -22,8 +31,26 @@ class MonitoringRepository(
             val unsyncedLogs = dao.getUnsyncedCallLogs()
             
             if (unsyncedLogs.isNotEmpty()) {
-                // Send to API
-                val response = apiService.uploadCallLogs(unsyncedLogs)
+                // Convert to API format
+                val apiLogs = unsyncedLogs.map { log ->
+                    CallLogEntryAPI(
+                        phoneNumber = log.phoneNumber,
+                        duration = log.duration.toInt(),
+                        callType = when (log.callType.uppercase()) {
+                            "INCOMING" -> "incoming"
+                            "OUTGOING" -> "outgoing"
+                            "MISSED" -> "missed"
+                            else -> "missed"
+                        },
+                        timestamp = dateFormat.format(Date(log.timestamp)),
+                        isKnownContact = log.isKnownContact,
+                        contactName = log.contactName
+                    )
+                }
+                
+                // Send to unified API endpoint
+                val request = ActivitySyncRequest(callLogs = apiLogs, smsLogs = emptyList())
+                val response = apiService.syncActivity(request)
                 
                 if (response.isSuccessful) {
                     // Mark as synced
@@ -37,7 +64,7 @@ class MonitoringRepository(
         }
     }
     
-    // SMS operations
+    // SMS operations - Updated to use unified API
     suspend fun syncSMSData(smsMessages: List<SMSEntry>) = withContext(Dispatchers.IO) {
         try {
             // Store locally first
@@ -47,8 +74,26 @@ class MonitoringRepository(
             val unsyncedMessages = dao.getUnsyncedSMSMessages()
             
             if (unsyncedMessages.isNotEmpty()) {
-                // Send to API
-                val response = apiService.uploadSMSMessages(unsyncedMessages)
+                // Convert to API format
+                val apiMessages = unsyncedMessages.map { sms ->
+                    SMSEntryAPI(
+                        senderNumber = sms.phoneNumber, // Railway expects 'senderNumber'
+                        messageCount = 1, // Each SMS entry represents one message
+                        messageType = when (sms.messageType.uppercase()) {
+                            "RECEIVED" -> "received"
+                            "SENT" -> "sent"
+                            else -> "received"
+                        },
+                        timestamp = dateFormat.format(Date(sms.timestamp)),
+                        isKnownContact = true, // Default to true, could be enhanced
+                        contactName = null, // Could be enhanced to lookup contact name
+                        hasLink = false
+                    )
+                }
+                
+                // Send to unified API endpoint
+                val request = ActivitySyncRequest(callLogs = emptyList(), smsLogs = apiMessages)
+                val response = apiService.syncActivity(request)
                 
                 if (response.isSuccessful) {
                     // Mark as synced
@@ -62,24 +107,72 @@ class MonitoringRepository(
         }
     }
     
-    // General sync operation
+    // General sync operation - Updated to use unified API endpoint
     suspend fun syncData() = withContext(Dispatchers.IO) {
         try {
-            // Sync call logs
+            // Get unsynced data
             val unsyncedCallLogs = dao.getUnsyncedCallLogs()
-            if (unsyncedCallLogs.isNotEmpty()) {
-                val callLogResponse = apiService.uploadCallLogs(unsyncedCallLogs)
-                if (callLogResponse.isSuccessful) {
-                    dao.markCallLogsSynced(unsyncedCallLogs.map { it.id })
-                }
-            }
-            
-            // Sync SMS messages
             val unsyncedSMS = dao.getUnsyncedSMSMessages()
-            if (unsyncedSMS.isNotEmpty()) {
-                val smsResponse = apiService.uploadSMSMessages(unsyncedSMS)
-                if (smsResponse.isSuccessful) {
-                    dao.markSMSMessagesSynced(unsyncedSMS.map { it.id })
+            
+            // Only sync if there's data to sync
+            if (unsyncedCallLogs.isNotEmpty() || unsyncedSMS.isNotEmpty()) {
+                
+                // Convert call logs to API format
+                val apiCallLogs = unsyncedCallLogs.map { log ->
+                    CallLogEntryAPI(
+                        phoneNumber = log.phoneNumber,
+                        duration = log.duration.toInt(),
+                        callType = when (log.callType.uppercase()) {
+                            "INCOMING" -> "incoming"
+                            "OUTGOING" -> "outgoing"
+                            "MISSED" -> "missed"
+                            else -> "missed"
+                        },
+                        timestamp = dateFormat.format(Date(log.timestamp)),
+                        isKnownContact = log.isKnownContact,
+                        contactName = log.contactName
+                    )
+                }
+                
+                // Convert SMS messages to API format
+                val apiSmsLogs = unsyncedSMS.map { sms ->
+                    SMSEntryAPI(
+                        senderNumber = sms.phoneNumber, // Railway expects 'senderNumber'
+                        messageCount = 1,
+                        messageType = when (sms.messageType.uppercase()) {
+                            "RECEIVED" -> "received"
+                            "SENT" -> "sent"
+                            else -> "received"
+                        },
+                        timestamp = dateFormat.format(Date(sms.timestamp)),
+                        isKnownContact = true,
+                        contactName = null,
+                        hasLink = false
+                    )
+                }
+                
+                // Send unified request to Railway backend
+                val activityRequest = ActivitySyncRequest(
+                    callLogs = apiCallLogs,
+                    smsLogs = apiSmsLogs
+                )
+                
+                val response = apiService.syncActivity(activityRequest)
+                
+                if (response.isSuccessful) {
+                    // Mark call logs as synced
+                    if (unsyncedCallLogs.isNotEmpty()) {
+                        dao.markCallLogsSynced(unsyncedCallLogs.map { it.id })
+                    }
+                    
+                    // Mark SMS messages as synced
+                    if (unsyncedSMS.isNotEmpty()) {
+                        dao.markSMSMessagesSynced(unsyncedSMS.map { it.id })
+                    }
+                    
+                    android.util.Log.i("MonitoringRepository", "Successfully synced ${apiCallLogs.size} call logs and ${apiSmsLogs.size} SMS messages")
+                } else {
+                    android.util.Log.e("MonitoringRepository", "Sync failed with response: ${response.code()} - ${response.message()}")
                 }
             }
         } catch (e: Exception) {

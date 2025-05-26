@@ -14,40 +14,66 @@
         <item name="android:textColor">@color/text_primary</item>
     </style>
 
-    <!-- Senior-friendly text styles -->
+    <!-- Modern text styles -->
     <style name="TextAppearance.Catamaran.Headline" parent="TextAppearance.Material3.HeadlineMedium">
-        <item name="android:textSize">32sp</item>
+        <item name="android:textSize">28sp</item>
         <item name="android:textColor">@color/text_primary</item>
-        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
         <item name="android:textStyle">bold</item>
+        <item name="android:letterSpacing">-0.02</item>
     </style>
 
     <style name="TextAppearance.Catamaran.Title" parent="TextAppearance.Material3.TitleLarge">
-        <item name="android:textSize">28sp</item>
+        <item name="android:textSize">22sp</item>
         <item name="android:textColor">@color/text_primary</item>
-        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
         <item name="android:textStyle">bold</item>
+        <item name="android:letterSpacing">-0.01</item>
     </style>
 
     <style name="TextAppearance.Catamaran.Body" parent="TextAppearance.Material3.BodyLarge">
-        <item name="android:textSize">20sp</item>
+        <item name="android:textSize">17sp</item>
         <item name="android:textColor">@color/text_primary</item>
         <item name="android:fontFamily">sans-serif</item>
-        <item name="android:lineSpacingExtra">4dp</item>
+        <item name="android:lineSpacingMultiplier">1.2</item>
     </style>
 
     <style name="TextAppearance.Catamaran.BodySecondary" parent="TextAppearance.Material3.BodyMedium">
-        <item name="android:textSize">18sp</item>
+        <item name="android:textSize">15sp</item>
         <item name="android:textColor">@color/text_secondary</item>
         <item name="android:fontFamily">sans-serif</item>
-        <item name="android:lineSpacingExtra">2dp</item>
+        <item name="android:lineSpacingMultiplier">1.2</item>
     </style>
 
     <style name="TextAppearance.Catamaran.Status" parent="TextAppearance.Material3.TitleMedium">
-        <item name="android:textSize">24sp</item>
-        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textSize">19sp</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:lineSpacingExtra">4dp</item>
+        <item name="android:letterSpacing">-0.01</item>
+    </style>
+
+    <!-- Card title styles -->
+    <style name="TextAppearance.Catamaran.CardTitle" parent="TextAppearance.Material3.TitleMedium">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/text_white</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:letterSpacing">-0.01</item>
+    </style>
+
+    <style name="TextAppearance.Catamaran.CardSubtitle" parent="TextAppearance.Material3.BodyMedium">
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/text_white</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:alpha">0.9</item>
+    </style>
+
+    <style name="TextAppearance.Catamaran.Usage" parent="TextAppearance.Material3.TitleLarge">
+        <item name="android:textSize">28sp</item>
+        <item name="android:textColor">@color/text_white</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:letterSpacing">-0.02</item>
     </style>
 
     <!-- Senior-friendly button styles -->
@@ -87,18 +113,34 @@
         <item name="backgroundTint">@color/button_negative</item>
     </style>
 
-    <!-- Card styles -->
+    <!-- Modern card styles -->
     <style name="Card.Catamaran" parent="Widget.Material3.CardView.Elevated">
         <item name="cardBackgroundColor">@color/background_card</item>
-        <item name="cardElevation">4dp</item>
-        <item name="cardCornerRadius">16dp</item>
-        <item name="android:layout_margin">16dp</item>
-        <item name="contentPadding">24dp</item>
+        <item name="cardElevation">2dp</item>
+        <item name="cardCornerRadius">20dp</item>
+        <item name="android:layout_margin">12dp</item>
+        <item name="contentPadding">20dp</item>
     </style>
 
     <style name="Card.Catamaran.Status" parent="Card.Catamaran">
-        <item name="cardElevation">2dp</item>
-        <item name="contentPadding">20dp</item>
+        <item name="cardElevation">3dp</item>
+        <item name="contentPadding">24dp</item>
+        <item name="cardCornerRadius">24dp</item>
+    </style>
+
+    <!-- Gradient cards for different categories -->
+    <style name="Card.Catamaran.Gradient">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_margin">12dp</item>
+        <item name="android:padding">24dp</item>
+        <item name="android:elevation">2dp</item>
+    </style>
+
+    <!-- Usage card style -->
+    <style name="Card.Catamaran.Usage" parent="Card.Catamaran.Gradient">
+        <item name="android:layout_height">120dp</item>
+        <item name="android:layout_marginVertical">8dp</item>
     </style>
 
     <!-- Toggle switch style -->

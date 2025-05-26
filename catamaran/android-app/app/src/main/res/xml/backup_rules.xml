@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<full-backup-content>
+    <!-- Exclude sensitive data from backup -->
+    <exclude domain="sharedpref" path="catamaran_prefs.xml"/>
+    <exclude domain="database" path="catamaran_database"/>
+    <exclude domain="database" path="catamaran_database-shm"/>
+    <exclude domain="database" path="catamaran_database-wal"/>
+</full-backup-content> 

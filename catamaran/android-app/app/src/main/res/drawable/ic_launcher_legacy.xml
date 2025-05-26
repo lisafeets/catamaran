@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+    
+    <!-- Background circle -->
+    <path
+        android:fillColor="@color/primary_blue"
+        android:pathData="M24,24m-24,0a24,24 0,1 1,48 0a24,24 0,1 1,-48 0" />
+    
+    <!-- Shield icon -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M24,8L16,11V18C16,22.55 19.84,26.74 24,28C28.16,26.74 32,22.55 32,18V11L24,8M24,14C25.4,14 26.8,15.6 26.8,17V18.5C27.4,18.5 28,19.1 28,19.7V23.2C28,23.8 27.4,24.3 26.8,24.3H21.2C20.6,24.3 20,23.8 20,23.2V19.8C20,19.2 20.6,18.7 21.2,18.7V17.2C21.2,15.6 22.6,14 24,14M24,15.2C23.2,15.2 22.5,15.7 22.5,16.5V18.7H25.5V16.5C25.5,15.7 24.8,15.2 24,15.2Z"/>
+</vector> 

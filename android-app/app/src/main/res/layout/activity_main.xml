@@ -6,121 +6,250 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingVertical="8dp">
 
         <!-- App Header -->
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Catamaran Family Watch"
-            android:textAppearance="@style/TextAppearance.Catamaran.Headline"
-            android:gravity="center"
-            android:layout_marginBottom="32dp" />
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="16dp">
 
-        <!-- Status Card -->
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Family Safety"
+                android:textAppearance="@style/TextAppearance.Catamaran.Headline"
+                android:gravity="start" />
+
+            <ImageView
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/ic_shield"
+                android:contentDescription="Family Safety"
+                android:alpha="0.6" />
+
+        </LinearLayout>
+
+        <!-- Activity Overview Card -->
+        <LinearLayout
+            style="@style/Card.Catamaran.Usage"
+            android:background="@drawable/gradient_purple_card"
+            android:orientation="vertical"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Phone Activity"
+                android:textAppearance="@style/TextAppearance.Catamaran.CardTitle"
+                android:layout_marginBottom="4dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/tv_daily_usage"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="2:15 hrs/day"
+                    android:textAppearance="@style/TextAppearance.Catamaran.Usage" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="12 activities today"
+                    android:textAppearance="@style/TextAppearance.Catamaran.CardSubtitle" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- Today's Monitoring Cards -->
+        <LinearLayout
+            style="@style/Card.Catamaran.Usage"
+            android:background="@drawable/gradient_green_card"
+            android:orientation="vertical"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Messages"
+                android:textAppearance="@style/TextAppearance.Catamaran.CardTitle"
+                android:layout_marginBottom="4dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/tv_message_count"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="18 messages"
+                    android:textAppearance="@style/TextAppearance.Catamaran.Usage" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="7 shared with family"
+                    android:textAppearance="@style/TextAppearance.Catamaran.CardSubtitle" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            style="@style/Card.Catamaran.Usage"
+            android:background="@drawable/gradient_pink_card"
+            android:orientation="vertical"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Phone Calls"
+                android:textAppearance="@style/TextAppearance.Catamaran.CardTitle"
+                android:layout_marginBottom="4dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/tv_call_count"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="8 calls"
+                    android:textAppearance="@style/TextAppearance.Catamaran.Usage" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="4 shared with family"
+                    android:textAppearance="@style/TextAppearance.Catamaran.CardSubtitle" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            style="@style/Card.Catamaran.Usage"
+            android:background="@drawable/gradient_yellow_card"
+            android:orientation="vertical"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Security"
+                android:textAppearance="@style/TextAppearance.Catamaran.CardTitle"
+                android:layout_marginBottom="4dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/tv_security_status"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Protected"
+                    android:textAppearance="@style/TextAppearance.Catamaran.Usage" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0 threats detected"
+                    android:textAppearance="@style/TextAppearance.Catamaran.CardSubtitle" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- Status Summary Card -->
         <androidx.cardview.widget.CardView
             style="@style/Card.Catamaran.Status">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:gravity="center">
 
                 <TextView
                     android:id="@+id/tv_status"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="✅ Protecting Your Family"
+                    android:text="Family Protection Active"
                     android:textAppearance="@style/TextAppearance.Catamaran.Status"
                     android:textColor="@color/status_active"
                     android:gravity="center"
-                    android:layout_marginBottom="12dp" />
+                    android:layout_marginBottom="8dp" />
 
                 <TextView
                     android:id="@+id/tv_status_details"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Catamaran is watching for suspicious calls and messages"
-                    android:textAppearance="@style/TextAppearance.Catamaran.Body"
+                    android:text="Monitoring calls and messages for family safety"
+                    android:textAppearance="@style/TextAppearance.Catamaran.BodySecondary"
                     android:gravity="center" />
 
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-
-        <!-- Today's Activity Card -->
-        <androidx.cardview.widget.CardView
-            style="@style/Card.Catamaran">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
                 <TextView
-                    android:id="@+id/tv_today_stats"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Today:\n📞 4 calls shared with family\n💬 7 messages shared with family\n🛡️ 0 suspicious activity detected"
-                    android:textAppearance="@style/TextAppearance.Catamaran.Body"
-                    android:lineSpacingExtra="8dp" />
-
-                <Button
-                    android:id="@+id/btn_view_activity"
-                    style="@style/Button.Catamaran.Secondary"
-                    android:layout_width="match_parent"
-                    android:layout_marginTop="16dp"
-                    android:text="View All Activity" />
+                    android:text="Last updated 34 mins ago"
+                    android:textAppearance="@style/TextAppearance.Catamaran.BodySecondary"
+                    android:gravity="center"
+                    android:layout_marginTop="8dp"
+                    android:alpha="0.7" />
 
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- Main Action Button -->
-        <Button
-            android:id="@+id/btn_toggle_protection"
-            style="@style/Button.Catamaran.Primary"
-            android:layout_width="match_parent"
-            android:layout_height="72dp"
-            android:text="Start Protection"
-            android:textSize="22sp"
-            android:layout_marginVertical="16dp" />
-
-        <!-- Quick Actions -->
+        <!-- Action Buttons -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            style="@style/Layout.Catamaran.Section">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Quick Actions"
-                android:textAppearance="@style/TextAppearance.Catamaran.Title"
-                android:layout_marginBottom="16dp" />
-
-            <Button
-                android:id="@+id/btn_call_family"
-                style="@style/Button.Catamaran.Secondary"
-                android:layout_width="match_parent"
-                android:text="📞 Call Sarah"
-                android:drawableStart="@drawable/ic_phone"
-                android:drawablePadding="16dp" />
+            android:orientation="horizontal"
+            android:layout_marginHorizontal="12dp"
+            android:layout_marginTop="8dp">
 
             <Button
                 android:id="@+id/btn_settings"
                 style="@style/Button.Catamaran.Secondary"
-                android:layout_width="match_parent"
-                android:text="⚙️ Settings"
-                android:drawableStart="@drawable/ic_settings"
-                android:drawablePadding="16dp" />
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_marginEnd="6dp"
+                android:text="Settings"
+                android:textSize="16sp" />
 
             <Button
-                android:id="@+id/btn_need_help"
-                style="@style/Button.Catamaran.Secondary"
-                android:layout_width="match_parent"
-                android:text="❓ Need Help?"
-                android:drawableStart="@drawable/ic_help"
-                android:drawablePadding="16dp" />
+                android:id="@+id/btn_view_activity"
+                style="@style/Button.Catamaran.Primary"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_marginStart="6dp"
+                android:text="View Details"
+                android:textSize="16sp" />
 
         </LinearLayout>
 

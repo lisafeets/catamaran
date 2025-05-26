@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data-extraction-rules>
+    <cloud-backup>
+        <!-- Exclude sensitive data from cloud backup -->
+        <exclude domain="sharedpref" path="catamaran_prefs.xml"/>
+        <exclude domain="database" path="catamaran_database"/>
+    </cloud-backup>
+    <device-transfer>
+        <!-- Allow basic app data transfer between devices -->
+        <include domain="sharedpref" path="."/>
+        <exclude domain="database" path="your_database_name.db"/>
+    </device-transfer>
+</data-extraction-rules> 

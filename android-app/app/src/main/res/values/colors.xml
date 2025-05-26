@@ -1,51 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Senior-friendly high contrast color scheme -->
+    <!-- Modern app color scheme inspired by iOS Screen Time -->
     
-    <!-- Primary colors - dark blue for trust and stability -->
-    <color name="primary">#1565C0</color>
-    <color name="primary_dark">#0D47A1</color>
+    <!-- Primary colors -->
+    <color name="primary">#007AFF</color>
+    <color name="primary_dark">#0056CC</color>
     <color name="primary_light">#E3F2FD</color>
     
-    <!-- Accent colors -->
-    <color name="accent_green">#2E7D32</color>
-    <color name="accent_red">#C62828</color>
-    <color name="accent_orange">#F57C00</color>
-    
-    <!-- Background colors - high contrast -->
-    <color name="background_primary">#FFFFFF</color>
+    <!-- Modern background colors -->
+    <color name="background_primary">#F2F2F7</color>
     <color name="background_secondary">#F8F9FA</color>
     <color name="background_card">#FFFFFF</color>
     
-    <!-- Text colors - high contrast for readability -->
-    <color name="text_primary">#212121</color>
-    <color name="text_secondary">#424242</color>
-    <color name="text_hint">#757575</color>
+    <!-- Modern text colors -->
+    <color name="text_primary">#1C1C1E</color>
+    <color name="text_secondary">#6D6D70</color>
+    <color name="text_hint">#8E8E93</color>
     <color name="text_white">#FFFFFF</color>
+    <color name="text_black">#000000</color>
+    
+    <!-- App category gradient colors (inspired by Screen Time) -->
+    <color name="gradient_purple_start">#AF52DE</color>
+    <color name="gradient_purple_end">#FF2D92</color>
+    
+    <color name="gradient_green_start">#30D158</color>
+    <color name="gradient_green_end">#00C896</color>
+    
+    <color name="gradient_pink_start">#FF2D92</color>
+    <color name="gradient_pink_end">#FF9500</color>
+    
+    <color name="gradient_yellow_start">#FFCC02</color>
+    <color name="gradient_yellow_end">#FF9F0A</color>
+    
+    <color name="gradient_blue_start">#007AFF</color>
+    <color name="gradient_blue_end">#5856D6</color>
     
     <!-- Status colors -->
-    <color name="status_active">#2E7D32</color>
-    <color name="status_inactive">#757575</color>
-    <color name="status_warning">#F57C00</color>
-    <color name="status_error">#C62828</color>
+    <color name="status_active">#30D158</color>
+    <color name="status_inactive">#8E8E93</color>
+    <color name="status_warning">#FF9F0A</color>
+    <color name="status_error">#FF3B30</color>
     
-    <!-- Button colors -->
-    <color name="button_primary">#1565C0</color>
-    <color name="button_primary_pressed">#0D47A1</color>
-    <color name="button_secondary">#E3F2FD</color>
-    <color name="button_positive">#2E7D32</color>
-    <color name="button_negative">#C62828</color>
+    <!-- Modern button colors -->
+    <color name="button_primary">#007AFF</color>
+    <color name="button_primary_pressed">#0056CC</color>
+    <color name="button_secondary">#F2F2F7</color>
+    <color name="button_positive">#30D158</color>
+    <color name="button_negative">#FF3B30</color>
     
     <!-- Border and divider colors -->
-    <color name="border_light">#E0E0E0</color>
-    <color name="border_medium">#BDBDBD</color>
-    <color name="divider">#E0E0E0</color>
+    <color name="border_light">#E5E5EA</color>
+    <color name="border_medium">#D1D1D6</color>
+    <color name="divider">#C6C6C8</color>
+    
+    <!-- Chart colors -->
+    <color name="chart_bar_active">#007AFF</color>
+    <color name="chart_bar_inactive">#E5E5EA</color>
     
     <!-- Material Design 3 colors -->
-    <color name="md_theme_light_primary">#1565C0</color>
+    <color name="md_theme_light_primary">#007AFF</color>
     <color name="md_theme_light_on_primary">#FFFFFF</color>
     <color name="md_theme_light_surface">#FFFFFF</color>
-    <color name="md_theme_light_on_surface">#212121</color>
-    <color name="md_theme_light_background">#FFFFFF</color>
-    <color name="md_theme_light_on_background">#212121</color>
+    <color name="md_theme_light_on_surface">#1C1C1E</color>
+    <color name="md_theme_light_background">#F2F2F7</color>
+    <color name="md_theme_light_on_background">#1C1C1E</color>
 </resources> 

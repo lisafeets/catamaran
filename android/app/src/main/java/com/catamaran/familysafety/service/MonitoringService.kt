@@ -17,6 +17,7 @@ import com.catamaran.familysafety.R
 import com.catamaran.familysafety.ui.MainActivity
 import com.catamaran.familysafety.utils.DataCollector
 import kotlinx.coroutines.*
+import android.content.pm.ServiceInfo
 
 class MonitoringService : Service() {
     
@@ -53,18 +54,28 @@ class MonitoringService : Service() {
         Log.d("MonitoringService", "Service destroyed")
     }
     
-    private fun startMonitoring() {
-        val notification = createNotification()
+private fun startMonitoring() {
+    val notification = createNotification()
+    
+    // Updated startForeground call with proper service type
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+        startForeground(
+            NOTIFICATION_ID, 
+            notification, 
+            ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC
+        )
+    } else {
         startForeground(NOTIFICATION_ID, notification)
-        
-        // Register content observers
-        registerContentObservers()
-        
-        // Schedule periodic data collection
-        scheduleDataCollection()
-        
-        Log.d("MonitoringService", "Monitoring started")
     }
+    
+    // Register content observers
+    registerContentObservers()
+    
+    // Schedule periodic data collection
+    scheduleDataCollection()
+    
+    Log.d("MonitoringService", "Monitoring started")
+}
     
     private fun stopMonitoring() {
         unregisterContentObservers()

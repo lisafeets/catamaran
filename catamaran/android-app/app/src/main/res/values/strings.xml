@@ -1,0 +1,60 @@
+<resources>
+    <string name="app_name">Catamaran Family Safety</string>
+    
+    <!-- Main Activity -->
+    <string name="monitoring_active">🛡️ Family Watch ACTIVE</string>
+    <string name="monitoring_inactive">⏸️ Family Watch INACTIVE</string>
+    <string name="start_monitoring">START MONITORING</string>
+    <string name="stop_monitoring">STOP MONITORING</string>
+    <string name="connected">✓ Connected to Catamaran</string>
+    <string name="not_connected">⚠ Not connected</string>
+    <string name="never_synced">Never synced</string>
+    <string name="last_sync">Last sync: %1$s</string>
+    
+    <!-- Buttons -->
+    <string name="settings">⚙️\nSETTINGS</string>
+    <string name="view_activity">📊\nVIEW ACTIVITY</string>
+    <string name="emergency_contact">🚨 CALL EMERGENCY CONTACT</string>
+    
+    <!-- Help Text -->
+    <string name="help_text">Tap \'START MONITORING\' to begin family safety tracking. Your family will be notified when monitoring is active.</string>
+    
+    <!-- Permissions -->
+    <string name="permissions_required">Permissions are required for family safety monitoring</string>
+    <string name="permission_call_log">Access to call logs is needed to monitor phone activity</string>
+    <string name="permission_sms">Access to SMS is needed to monitor messaging activity</string>
+    <string name="permission_contacts">Access to contacts helps identify family members</string>
+    
+    <!-- Notifications -->
+    <string name="monitoring_notification_title">Family Safety Active</string>
+    <string name="monitoring_notification_text">Monitoring phone activity for family safety</string>
+    <string name="sync_notification_title">Syncing Data</string>
+    <string name="sync_notification_text">Uploading activity data to Catamaran</string>
+    
+    <!-- Settings -->
+    <string name="settings_title">Settings</string>
+    <string name="monitoring_settings">Monitoring Settings</string>
+    <string name="enable_monitoring">Enable Monitoring</string>
+    <string name="sync_frequency">Sync Frequency</string>
+    <string name="emergency_contact_settings">Emergency Contact</string>
+    <string name="set_emergency_contact">Set Emergency Contact</string>
+    <string name="account_settings">Account Settings</string>
+    <string name="login_logout">Login/Logout</string>
+    
+    <!-- Errors -->
+    <string name="error_no_permissions">Cannot start monitoring without required permissions</string>
+    <string name="error_network">Network error. Please check your connection.</string>
+    <string name="error_sync_failed">Failed to sync data with server</string>
+    <string name="error_emergency_contact">No emergency contact set</string>
+    
+    <!-- Success Messages -->
+    <string name="monitoring_started">Family safety monitoring started</string>
+    <string name="monitoring_stopped">Family safety monitoring stopped</string>
+    <string name="sync_successful">Data synced successfully</string>
+    
+    <!-- Time Formats -->
+    <string name="time_just_now">Just now</string>
+    <string name="time_minutes_ago">%1$d minutes ago</string>
+    <string name="time_hours_ago">%1$d hours ago</string>
+    <string name="time_days_ago">%1$d days ago</string>
+</resources> 

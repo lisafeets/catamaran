@@ -6,6 +6,7 @@ import { prisma } from '../server';
 import { ApiError, asyncHandler } from '../middleware/errorHandler';
 import { authenticateToken } from '../middleware/auth';
 import logger from '../utils/logger';
+import { Router, Request, Response } from 'express';
 
 const router = express.Router();
 
@@ -328,5 +329,39 @@ router.get('/me', authenticateToken, asyncHandler(async (req, res) => {
     user
   });
 }));
+
+// Generate test token endpoint (for testing only)
+router.post('/token', async (req: Request, res: Response) => {
+  try {
+    const jwtSecret = process.env.JWT_SECRET || 'catamaran-default-jwt-secret-for-testing-only-change-in-production';
+    const now = Math.floor(Date.now() / 1000);
+    const sixMonthsFromNow = now + (6 * 30 * 24 * 60 * 60); // 6 months in seconds
+
+    const payload = {
+      id: 'test-user-123',
+      email: 'test@example.com',
+      role: 'SENIOR',
+      iat: now,
+      exp: sixMonthsFromNow
+    };
+
+    const token = jwt.sign(payload, jwtSecret);
+
+    res.json({
+      success: true,
+      token: token,
+      expiresAt: new Date(sixMonthsFromNow * 1000).toISOString(),
+      payload: payload
+    });
+
+    logger.info('Generated test token', { expiresAt: new Date(sixMonthsFromNow * 1000).toISOString() });
+  } catch (error) {
+    logger.error('Error generating test token', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to generate token'
+    });
+  }
+});
 
 export default router; 
